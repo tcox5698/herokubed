@@ -1,7 +1,7 @@
-class Hola
+class Herokubed
   class << self
-    def hi
-      puts "Hello world!"
+    def hi(*args)
+      puts 'Hello world!'
     end
   end
 end

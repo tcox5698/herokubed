@@ -9,5 +9,6 @@ Gem::Specification.new do |s|
   s.files       = ["lib/herokubed.rb"]
   s.homepage    =
       'http://rubygems.org/gems/hola'
-  s.license       = 'MIT'
+  s.license       = 'Apache License version 2.0'
+  s.executables = 'herokubed'
 end
