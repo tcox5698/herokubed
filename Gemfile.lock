@@ -41,6 +41,6 @@ PLATFORMS
 DEPENDENCIES
   cucumber (~> 2.1)
   herokubed!
-  rake (~> 10.4.2)
+  rake (~> 10.4, >= 10.4.2)
   rspec (~> 3.4)
   rspec-expectations (~> 3.4)

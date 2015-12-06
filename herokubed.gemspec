@@ -9,10 +9,10 @@ Gem::Specification.new do |s|
   s.files       = ['lib/herokubed.rb']
   s.homepage    =
       'http://rubygems.org/gems/hola'
-  s.license       = 'Apache License version 2.0'
+  s.license       = 'Apache', '2.0'
   s.executables = 'herokubed'
   s.add_development_dependency 'rspec', '~> 3.4'
   s.add_development_dependency 'rspec-expectations', '~> 3.4'
   s.add_development_dependency 'cucumber', '~> 2.1'
-  s.add_development_dependency 'rake', '~> 10.4.2'
+  s. add_development_dependency 'rake', '~> 10.4', '>= 10.4.2'
 end
