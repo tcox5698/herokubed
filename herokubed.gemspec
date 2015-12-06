@@ -14,5 +14,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec', '~> 3.4'
   s.add_development_dependency 'rspec-expectations', '~> 3.4'
   s.add_development_dependency 'cucumber', '~> 2.1'
-  s. add_development_dependency 'rake', '~> 10.4', '>= 10.4.2'
+  s.add_development_dependency 'rake', '~> 10.4', '>= 10.4.2'
 end
