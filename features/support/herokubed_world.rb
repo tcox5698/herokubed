@@ -1,4 +1,4 @@
-require 'JSON'
+require 'json'
 
 module HerokubedWorld
   def call_heroku(http_method, api_call, data = nil)
