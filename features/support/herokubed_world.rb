@@ -10,7 +10,6 @@ module HerokubedWorld
   def call_heroku(http_method, api_call, data = nil)
     expect(`echo $HEROKU_TOKEN`.chomp).not_to be_empty, 'Must supply HEROKU_TOKEN as environment variable.'
     curl_command = %Q(curl -s -X #{http_method} https://api.heroku.com/#{api_call} -H "Accept: application/vnd.heroku+json; version=3" -H "Authorization: Bearer $HEROKU_TOKEN" -H "Content-Type: application/json" #{data_string(data)})
-    puts "CURL COMMAND: \n#{curl_command}"
     `#{curl_command}`
   end
 
