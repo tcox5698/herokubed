@@ -20,6 +20,7 @@ GEM
     gherkin3 (3.1.2)
     multi_json (1.11.2)
     multi_test (0.1.2)
+    pg (0.18.4)
     rake (10.4.2)
     rspec (3.4.0)
       rspec-core (~> 3.4.0)
@@ -41,6 +42,10 @@ PLATFORMS
 DEPENDENCIES
   cucumber (~> 2.1)
   herokubed!
+  pg (~> 0.18, >= 0.18.4)
   rake (~> 10.4, >= 10.4.2)
   rspec (~> 3.4)
   rspec-expectations (~> 3.4)
+
+BUNDLED WITH
+   1.10.6
