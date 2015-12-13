@@ -1,9 +1,16 @@
 require 'json'
 
 module HerokubedWorld
+  def add_postgres_addon app_name
+    data = {'plan' => 'heroku-postgresql:hobby-dev'}
+    response = call_heroku('POST', "apps/#{app_name}/addons", data)
+    expect(response).to include 'heroku-postgresql:hobby-dev'
+  end
+
   def call_heroku(http_method, api_call, data = nil)
     expect(`echo $HEROKU_TOKEN`.chomp).not_to be_empty, 'Must supply HEROKU_TOKEN as environment variable.'
     curl_command = %Q(curl -s -X #{http_method} https://api.heroku.com/#{api_call} -H "Accept: application/vnd.heroku+json; version=3" -H "Authorization: Bearer $HEROKU_TOKEN" -H "Content-Type: application/json" #{data_string(data)})
+    puts "CURL COMMAND: \n#{curl_command}"
     `#{curl_command}`
   end
 
@@ -35,8 +42,8 @@ module HerokubedWorld
     call_heroku('GET', 'apps')
   end
 
-  def env_app_name(app_name)
-    "#{app_name}-#{`whoami`.chomp}"
+  def generate_env_app_name(app_name)
+    "#{app_name}-#{`whoami`.chomp}-#{Time.now.strftime('%L')}"
   end
 end
 
