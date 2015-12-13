@@ -1,3 +1,4 @@
+
 def test_app_names
   @test_app_names ||= []
 end
@@ -18,6 +19,7 @@ end
 After do
   test_app_names.each do |test_app_name|
     puts "deleted app: #{test_app_name}"
-    expect(`heroku apps:destroy -a #{test_app_name} --confirm #{test_app_name}`.chomp).to eq ''
+    expect(`heroku apps:destroy -a #{test_app_name} --confirm #{test_app_name}`.chomp).to include 'Destroying'
   end
 end
+
