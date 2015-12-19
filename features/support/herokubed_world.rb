@@ -34,13 +34,15 @@ module HerokubedWorld
   def delete_test_apps
     @test_app_names.each do |test_app_name|
       expect(call_heroku('DELETE', "apps/#{test_app_name}")).to include 'released_at'
-
       puts "deleted app: #{test_app_name}"
     end
+
+    current_app_names = current_apps.map{|app_json|app_json['name']}
+    expect(current_app_names - @test_app_names).to eq (current_app_names)
   end
 
   def current_apps
-    call_heroku('GET', 'apps')
+    JSON.parse(call_heroku('GET', 'apps'))
   end
 
   def env_app_name(app_name)
