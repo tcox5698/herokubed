@@ -6,5 +6,5 @@ Feature: I can transfer a postgres database from one app instance to another.
     And I add table 'kubedTable1' to app 'kubedapp1' with a record with value '5364'
     Then app 'kubedapp1' has a table 'kubedTable1' with a records with value '5364'
     And I have app 'kubedapp2' with a postgres database
-#    When I execute 'k transferdb kubedapp1 kubedapp2'
+#    When I successfully execute 'k transferdb kubedapp1 kubedapp2'
 #    Then app 'kubedapp2' has a table 'kubedTable1'

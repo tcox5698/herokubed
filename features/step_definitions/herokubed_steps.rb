@@ -23,3 +23,11 @@ Then(/^app '(.*)' has a table '(.*)' with a records with value '(.*)'$/) do |app
     end
   end
 end
+
+When(/^I successfully execute '(.*)'$/) do |command|
+  puts "STEP: executing: #{command}"
+  pid = spawn(command)
+  Process.wait pid
+  puts "STEP: completed: #{command}"
+
+end
