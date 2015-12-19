@@ -1,10 +1,8 @@
 require 'herokubed'
 
 describe Herokubed do
-  describe '.hi' do
-    subject { Herokubed.hi }
 
-    it { is_expected.to be_nil }
+  it 'should test something' do
+    expect('bob'.size).to eq 3
   end
-
 end
