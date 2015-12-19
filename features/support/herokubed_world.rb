@@ -1,4 +1,5 @@
 require 'json'
+require 'pg'
 
 module HerokubedWorld
   def add_postgres_addon app_name
@@ -48,6 +49,13 @@ module HerokubedWorld
       @mapped_app_names[app_name] = "#{app_name}-#{`whoami`.chomp}-#{Time.now.strftime('%L')}"
     end
     @mapped_app_names[app_name]
+  end
+
+  def with_db(app_name)
+    database_url = JSON.parse(call_heroku('GET', "apps/#{env_app_name(app_name)}/config-vars"))['DATABASE_URL']
+    conn = PG.connect(database_url)
+    yield conn
+    conn.close
   end
 end
 
