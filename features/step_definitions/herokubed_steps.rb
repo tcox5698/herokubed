@@ -31,3 +31,10 @@ When(/^I successfully execute '(.*)'$/) do |command|
   puts "STEP: completed: #{command}"
 
 end
+
+Given(/^herokubed is built and installed$/) do
+  gem_file_name = `gem build herokubed.gemspec | grep -Eo 'File:(.*)$' | cut -c6-`
+  expect(gem_file_name).to match /herokubed-.*\.gem/
+  install_output = `gem install --no-ri --no-rdoc #{gem_file_name}`
+  expect(install_output).to match /Successfully installed herokubed-.*/
+end

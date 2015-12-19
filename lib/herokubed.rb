@@ -1,7 +1,7 @@
 class Herokubed
   class << self
-    def hi(*args)
-      puts 'Hello world!'
+    def ktransferdb(*args)
+      puts 'Hero Kubed Says Hello World!'
     end
   end
 end

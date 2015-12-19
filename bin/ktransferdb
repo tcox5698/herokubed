@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 
 require 'herokubed'
-puts Herokubed.hi(ARGV[0])
+puts Herokubed.ktransferdb(ARGV[0])
