@@ -4,7 +4,6 @@ Given(/^I have logged into heroku$/) do
   expect(call_heroku('GET', 'apps')).to include 'build_stack'
 end
 
-
 And(/^I have app '(.*)' with a postgres database$/) do |app_name|
   create_test_app env_app_name(app_name)
   expect(call_heroku('GET', 'apps')).to include "https://#{env_app_name(app_name)}.herokuapp.com"
@@ -12,22 +11,22 @@ And(/^I have app '(.*)' with a postgres database$/) do |app_name|
   add_postgres_addon(env_app_name(app_name))
 end
 
-And(/^I add table '(.*)' to app '(.*)' with the following records$/) do |table_name, app_name, table|
-  columns = table.hashes.first.keys
-  columns_strings = columns.map{|original| "#{original} integer"}
-  columns_string = columns_strings.join(', ')
-
+And(/^I add table '(.*)' to app '(.*)' with a record with value '(.*)'$/) do |table_name, app_name, insert_value|
   database_url = JSON.parse(call_heroku('GET', "apps/#{env_app_name(app_name)}/config-vars"))['DATABASE_URL']
   conn = PG.connect(database_url)
-  conn.exec("CREATE TABLE #{table_name} (#{columns_string});")
+  conn.exec("CREATE TABLE #{table_name} (name varchar(100));")
 
+  conn.exec("INSERT INTO #{table_name} (name) values ('#{insert_value}');")
 
-  conn.exec("INSERT INTO #{table_name} (#{columns.join(',')}) values (1234);")
+  conn.close
+end
 
-  conn.exec("SELECT * FROM #{table_name}") do |result|
-    result.each do |row|
-      expect(row['id']).to eq '1234'
-    end
+Then(/^app '(.*)' has a table '(.*)' with a records with value '(.*)'$/) do |app_name, expected_table, expected_value|
+  database_url = JSON.parse(call_heroku('GET', "apps/#{env_app_name(app_name)}/config-vars"))['DATABASE_URL']
+  conn = PG.connect(database_url)
+
+  conn.exec("SELECT * FROM #{expected_table}") do |result|
+    expect(result.first['name']).to eq expected_value
   end
 
   conn.close
