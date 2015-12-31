@@ -23,8 +23,9 @@ Usage: ktransferdb source_app_name target_app_name
       allow(Herokubed).to receive(:exit)
       allow(Herokubed).to receive(:puts)
       allow(Herokubed).to receive(:spawn).and_return 'fake pid'
+      allow(Herokubed).to receive(:database_url).and_return 'fake_db_url'
       allow(Process).to receive(:wait)
-      Herokubed.ktransferdb(*params.split)
+      Herokubed.transfer_db(*params.split)
     end
 
     #heroku pg:copy flailing-papaya-42::ORANGE GREEN --app sushi
@@ -33,8 +34,12 @@ Usage: ktransferdb source_app_name target_app_name
       let(:params) { 'one_param two_param' }
 
       context 'happy path' do
+        it 'uses the source app_name to get the source database_url' do
+          expect(Herokubed).to have_received(:database_url).with('one_param')
+        end
+
         it 'performs a command line copy' do
-          expected_command = 'heroku pg:copy one_param --app two_param'
+          expected_command = 'heroku pg:copy fake_db_url DATABASE_URL --app two_param --confirm two_param'
           expect(Herokubed).to have_received(:spawn).with(expected_command)
         end
 
@@ -77,6 +82,20 @@ Usage: ktransferdb source_app_name target_app_name
     context 'with no parameters' do
       let(:params) { '' }
       it_behaves_like 'an incorrect commandline usage'
+    end
+  end
+
+  describe '.database_url' do
+    let(:input_app_name) { 'bob_app' }
+    subject { Herokubed.database_url(input_app_name) }
+    before do
+      allow(Net::HTTP).to receive(:GET)
+    end
+  end
+
+  describe '.database_color' do
+    it 'works' do
+      Herokubed.database_color('bob')
     end
   end
 end

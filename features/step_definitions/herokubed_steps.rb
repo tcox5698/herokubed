@@ -26,10 +26,12 @@ end
 
 When(/^I successfully execute '(.*)'$/) do |command|
   puts "STEP: executing: #{command}"
-  pid = spawn(command)
+  command_array = command.split(' ')
+  command_array[1] = env_app_name(command_array[1])
+  command_array[2] = env_app_name(command_array[2])
+  pid = spawn(command_array.join(' '))
   Process.wait pid
   puts "STEP: completed: #{command}"
-
 end
 
 Given(/^herokubed is built and installed$/) do
@@ -37,4 +39,8 @@ Given(/^herokubed is built and installed$/) do
   expect(gem_file_name).to match /herokubed-.*\.gem/
   install_output = `gem install --no-ri --no-rdoc #{gem_file_name}`
   expect(install_output).to match /Successfully installed herokubed-.*/
+end
+
+Then(/^I get addon info for app '(.*)' addon '(.*)'$/) do |app_name, addon_name|
+  puts call_heroku('GET', "apps/#{env_app_name(app_name)}/config-vars")
 end
