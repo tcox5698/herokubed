@@ -1,4 +1,6 @@
 Given(/^I have logged into heroku$/) do
+  setup_heroku_credentials
+
   expect(call_heroku('GET', 'apps')).to include 'build_stack'
 end
 
@@ -35,12 +37,18 @@ When(/^I successfully execute '(.*)'$/) do |command|
 end
 
 Given(/^herokubed is built and installed$/) do
-  gem_file_name = `gem build herokubed.gemspec | grep -Eo 'File:(.*)$' | cut -c6-`
+  gem_file_name = ` gem build herokubed.gemspec | grep -Eo 'File:(.*)$' | cut -c6-`
   expect(gem_file_name).to match /herokubed-.*\.gem/
-  install_output = `gem install --no-ri --no-rdoc #{gem_file_name}`
-  expect(install_output).to match /Successfully installed herokubed-.*/
-end
+  install_output = ` gem install --no-ri --no-rdoc #{gem_file_name}`
+    expect(install_output).to match /Successfully installed herokubed-.*/
+  end
 
-Then(/^I get addon info for app '(.*)' addon '(.*)'$/) do |app_name, addon_name|
-  puts call_heroku('GET', "apps/#{env_app_name(app_name)}/config-vars")
-end
+  Then(/^I get addon info for app '(.*)' addon '(.*)'$/) do |app_name, addon_name|
+    puts call_heroku('GET', "apps/#{env_app_name(app_name)}/config-vars")
+  end
+
+  Given(/^heroku toolbelt is installed$/) do
+    unless `which heroku`.include? 'heroku'
+      `wget -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh`
+    end
+  end

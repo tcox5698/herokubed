@@ -1,6 +1,7 @@
 Feature: I can transfer a postgres database from one app instance to another.
 
   Scenario: I can transfer a db from one existing instance to another existing instance.
+    Given heroku toolbelt is installed
     Given herokubed is built and installed
     Given I have logged into heroku
     And I have app 'kubedapp1' with a postgres database

@@ -61,6 +61,28 @@ module HerokubedWorld
     yield conn
     conn.close
   end
+
+  def setup_heroku_credentials
+    netrc = File.join(ENV['HOME'], '.netrc')
+    unless File.exists?(netrc)
+      unless ENV['HEROKU_USERNAME']
+        raise 'Environment variable HEROKU_USERNAME is required.'
+      end
+
+      unless ENV['HEROKU_TOKEN']
+        raise 'Environment variable HEROKU_TOKEN is required.'
+      end
+
+      File.open(netrc, 'w') do |f|
+        f.puts %Q(
+machine api.heroku.com
+  login #{ENV['HEROKU_USERNAME']}
+  password #{ENV['HEROKU_TOKEN']}
+               )
+      end
+      `chmod 0600 /home/vagrant/.netrc`
+    end
+  end
 end
 
 World(HerokubedWorld)
