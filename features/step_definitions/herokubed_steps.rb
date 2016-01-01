@@ -44,7 +44,7 @@ Given(/^herokubed is built and installed$/) do
   end
 
   Then(/^I get addon info for app '(.*)' addon '(.*)'$/) do |app_name, addon_name|
-    puts call_heroku('GET', "apps/#{env_app_name(app_name)}/config-vars")
+    call_heroku('GET', "apps/#{env_app_name(app_name)}/config-vars")
   end
 
   Given(/^heroku toolbelt is installed$/) do

@@ -11,7 +11,6 @@ module HerokubedWorld
   def call_heroku(http_method, api_call, data = nil)
     expect(`echo $HEROKU_TOKEN`.chomp).not_to be_empty, 'Must supply HEROKU_TOKEN as environment variable.'
     curl_command = %Q(curl -s -X #{http_method} https://api.heroku.com/#{api_call} -H "Accept: application/vnd.heroku+json; version=3" -H "Authorization: Bearer $HEROKU_TOKEN" -H "Content-Type: application/json" #{data_string(data)})
-    #puts "CURL COMMAND:\n#{curl_command}"
     `#{curl_command}`
   end
 
@@ -28,14 +27,12 @@ module HerokubedWorld
     register_test_app test_app_name
 
     expect(call_heroku('POST', 'apps', {'name' => test_app_name})).to include test_app_name
-    #puts "created app #{test_app_name}"
   end
 
   def delete_test_apps
     if @test_app_names
       @test_app_names.each do |test_app_name|
         expect(call_heroku('DELETE', "apps/#{test_app_name}")).to include 'released_at'
-        #puts "deleted app: #{test_app_name}"
       end
 
       current_app_names = current_apps.map { |app_json| app_json['name'] }

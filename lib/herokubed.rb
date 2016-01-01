@@ -22,7 +22,6 @@ class Herokubed
 
     def database_url(app_name)
       config_url = "https://api.heroku.com/apps/#{app_name}/config-vars"
-      puts "CONFIG URL: #{config_url}"
       uri = URI.parse(config_url)
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl=true
@@ -36,8 +35,6 @@ class Herokubed
       res = http.start do |http|
         http.request(req)
       end
-      puts res.code
-      puts res.body
       JSON.parse(res.body)['DATABASE_URL']
     end
 
