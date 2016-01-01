@@ -6,18 +6,7 @@ Feature: I can transfer a postgres database from one app instance to another.
     Given I have logged into heroku
     And I have app 'kubedapp1' with a postgres database
     And I add table 'kubedTable1' to app 'kubedapp1' with a record with value '5364'
-    Then app 'kubedapp1' has a table 'kubedTable1' with a records with value '5364'
+    Then app 'kubedapp1' has a table 'kubedTable1' with a record with value '5364'
     And I have app 'kubedapp2' with a postgres database
     When I successfully execute 'ktransferdb kubedapp1 kubedapp2'
-    Then app 'kubedapp2' has a table 'kubedTable1' with a records with value '5364'
-
-
-  #heroku-postgresql
-  #GET https://api.heroku.com/apps/$APP_ID_OR_NAME/addons/$ADDON_ID_OR_NAME
-#  Scenario: Now Try This
-#    Given I have app 'kubedapp1' with a postgres database
-#    Then I get addon info for app 'kubedapp1' addon 'heroku-postgresql'
-#
-#  Scenario: Try this
-#    Given herokubed is built and installed
-#    When I successfully execute 'ktransferdb kubedapp1 kubedapp2'
+    Then app 'kubedapp2' has a table 'kubedTable1' with a record with value '5364'

@@ -18,7 +18,7 @@ And(/^I add table '(.*)' to app '(.*)' with a record with value '(.*)'$/) do |ta
   end
 end
 
-Then(/^app '(.*)' has a table '(.*)' with a records with value '(.*)'$/) do |app_name, expected_table, expected_value|
+Then(/^app '(.*)' has a table '(.*)' with a record with value '(.*)'$/) do |app_name, expected_table, expected_value|
   with_db(app_name) do |conn|
     conn.exec("SELECT * FROM #{expected_table}") do |result|
       expect(result.first['name']).to eq expected_value

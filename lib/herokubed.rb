@@ -6,8 +6,6 @@ class Herokubed
   class << self
 
     def transfer_db(*args)
-      STDERR.puts "YABBA: #{args}"
-
       if args.length != 2
         puts MESSAGE_USAGE
         exit false
@@ -20,13 +18,6 @@ class Herokubed
       puts "DB COPY COMMAND: #{db_copy_command}"
       pid = spawn(db_copy_command)
       Process.wait pid
-    end
-
-    def database_color(app_name)
-      puts "GETTING DB COLOR"
-      captures = `heroku pg:info --app #{app_name} | grep -Eo 'HEROKU_POSTGRESQL_(.*)_URL,'`.scan /HEROKU_POSTGRESQL_(.*)_URL/
-      puts "DATABASE COLOR: #{captures[0]}"
-      captures[0]
     end
 
     def database_url(app_name)

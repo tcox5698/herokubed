@@ -28,8 +28,6 @@ Usage: ktransferdb source_app_name target_app_name
       Herokubed.transfer_db(*params.split)
     end
 
-    #heroku pg:copy flailing-papaya-42::ORANGE GREEN --app sushi
-
     context 'with two parameters' do
       let(:params) { 'one_param two_param' }
 
@@ -90,12 +88,6 @@ Usage: ktransferdb source_app_name target_app_name
     subject { Herokubed.database_url(input_app_name) }
     before do
       allow(Net::HTTP).to receive(:GET)
-    end
-  end
-
-  describe '.database_color' do
-    it 'works' do
-      Herokubed.database_color('bob')
     end
   end
 end
