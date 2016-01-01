@@ -1,4 +1,6 @@
 Given(/^I have logged into heroku$/) do
+  setup_heroku_credentials
+
   expect(call_heroku('GET', 'apps')).to include 'build_stack'
 end
 
@@ -16,7 +18,7 @@ And(/^I add table '(.*)' to app '(.*)' with a record with value '(.*)'$/) do |ta
   end
 end
 
-Then(/^app '(.*)' has a table '(.*)' with a records with value '(.*)'$/) do |app_name, expected_table, expected_value|
+Then(/^app '(.*)' has a table '(.*)' with a record with value '(.*)'$/) do |app_name, expected_table, expected_value|
   with_db(app_name) do |conn|
     conn.exec("SELECT * FROM #{expected_table}") do |result|
       expect(result.first['name']).to eq expected_value
@@ -26,8 +28,27 @@ end
 
 When(/^I successfully execute '(.*)'$/) do |command|
   puts "STEP: executing: #{command}"
-  pid = spawn(command)
+  command_array = command.split(' ')
+  command_array[1] = env_app_name(command_array[1])
+  command_array[2] = env_app_name(command_array[2])
+  pid = spawn(command_array.join(' '))
   Process.wait pid
   puts "STEP: completed: #{command}"
-
 end
+
+Given(/^herokubed is built and installed$/) do
+  gem_file_name = ` gem build herokubed.gemspec | grep -Eo 'File:(.*)$' | cut -c6-`
+  expect(gem_file_name).to match /herokubed-.*\.gem/
+  install_output = ` gem install --no-ri --no-rdoc #{gem_file_name}`
+    expect(install_output).to match /Successfully installed herokubed-.*/
+  end
+
+  Then(/^I get addon info for app '(.*)' addon '(.*)'$/) do |app_name, addon_name|
+    call_heroku('GET', "apps/#{env_app_name(app_name)}/config-vars")
+  end
+
+  Given(/^heroku toolbelt is installed$/) do
+    unless `which heroku`.include? 'heroku'
+      `wget -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh`
+    end
+  end

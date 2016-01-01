@@ -8,9 +8,9 @@ Gem::Specification.new do |s|
   s.email       = 'tcox56_98@yahoo.com'
   s.files       = ['lib/herokubed.rb']
   s.homepage    =
-      'http://rubygems.org/gems/hola'
+      'https://github.com/tcox5698/herokubed'
   s.license       = 'Apache-2.0'
-  s.executables = 'herokubed'
+  s.executables = 'ktransferdb'
   s.add_development_dependency 'rspec', '~> 3.4'
   s.add_development_dependency 'rspec-expectations', '~> 3.4'
   s.add_development_dependency 'cucumber', '~> 2.1'
