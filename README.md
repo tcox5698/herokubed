@@ -1,4 +1,6 @@
-https://api.travis-ci.org/tcox5698/herokubed.svg
+![Travis CI build status](https://api.travis-ci.org/tcox5698/herokubed.svg)
+
+
 
 # herokubed
 
