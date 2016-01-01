@@ -1,3 +1,5 @@
+https://api.travis-ci.org/tcox5698/herokubed.svg
+
 # herokubed
 
 Command line conveniences for heroku in a gem
