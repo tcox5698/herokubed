@@ -2,15 +2,15 @@ require 'herokubed_transfer'
 
 describe Herokubed::Transfer do
 
-  shared_examples_for 'an incorrect commandline usage' do
+  shared_examples_for 'an incorrect ktransferdb usage' do
     it 'puts a usage message' do
-      expect(Herokubed::Transfer).to have_received(:puts).with %q{
+      expect(Herokubed::Transfer).to have_received(:puts).with %q(
 Transfers a postgres database from one heroku
 application to another, overwriting the postgres
 database of the second application.
 
 Usage: ktransferdb source_app_name target_app_name
-}
+)
     end
 
     it 'exits as failed' do
@@ -22,9 +22,8 @@ Usage: ktransferdb source_app_name target_app_name
     before do
       allow(Herokubed::Transfer).to receive(:exit)
       allow(Herokubed::Transfer).to receive(:puts)
-      allow(Herokubed).to receive(:spawn).and_return 'fake pid'
+      allow(Herokubed).to receive(:spawn_command)
       allow(Herokubed).to receive(:database_url).and_return 'fake_db_url'
-      allow(Process).to receive(:wait)
       Herokubed::Transfer.transfer_db(*params.split)
     end
 
@@ -38,28 +37,24 @@ Usage: ktransferdb source_app_name target_app_name
 
         it 'performs a command line copy' do
           expected_command = 'heroku pg:copy fake_db_url DATABASE_URL --app two_param --confirm two_param'
-          expect(Herokubed).to have_received(:spawn).with(expected_command)
-        end
-
-        it 'waits on the fake pid' do
-          expect(Process).to have_received(:wait).with 'fake pid'
+          expect(Herokubed).to have_received(:spawn_command).with(expected_command)
         end
       end
     end
 
     context 'with more than two parameters' do
       let(:params) { 'one_param two_param three_param' }
-      it_behaves_like 'an incorrect commandline usage'
+      it_behaves_like 'an incorrect ktransferdb usage'
     end
 
     context 'with insufficient parameters' do
       let(:params) { 'one_param' }
-      it_behaves_like 'an incorrect commandline usage'
+      it_behaves_like 'an incorrect ktransferdb usage'
     end
 
     context 'with no parameters' do
       let(:params) { '' }
-      it_behaves_like 'an incorrect commandline usage'
+      it_behaves_like 'an incorrect ktransferdb usage'
     end
   end
 
