@@ -26,14 +26,23 @@ Then(/^app '(.*)' has a table '(.*)' with a record with value '(.*)'$/) do |app_
   end
 end
 
-When(/^I successfully execute '(.*)'$/) do |command|
-  puts "STEP: executing: #{command}"
-  command_array = command.split(' ')
-  command_array[1] = env_app_name(command_array[1])
-  command_array[2] = env_app_name(command_array[2])
+When(/^I successfully execute kbackupdb for app '(.*)'$/) do |app_name|
+  puts "STEP: executing: kbackupdb"
+  command_array = ['kbackupdb']
+  command_array << env_app_name(app_name)
   pid = spawn(command_array.join(' '))
   Process.wait pid
-  puts "STEP: completed: #{command}"
+  puts "STEP: completed: #{command_array.inspect}"
+end
+
+When(/^I successfully execute ktransferdb from app '(.*)' to app '(.*)'$/) do |app_name_1, app_name_2|
+  puts "STEP: executing: ktransferdb"
+  command_array = ['ktransferdb']
+  command_array << env_app_name(app_name_1)
+  command_array << env_app_name(app_name_2)
+  pid = spawn(command_array.join(' '))
+  Process.wait pid
+  puts "STEP: completed: #{command_array.inspect}"
 end
 
 Given(/^herokubed is built and installed$/) do
@@ -52,3 +61,21 @@ Given(/^herokubed is built and installed$/) do
       `wget -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh`
     end
   end
+
+Then(/^I have a dump file in the \.dbwork directory for app '(.*)'$/) do |app_name|
+  expect(Dir[".dbwork/*#{app_name}*"][0]).to match /#{app_name}.*.dump/
+end
+
+When(/^I load the \.dbwork dump file for app '(.*)' into local db '(.*)'$/) do |app_name, local_db_name|
+  create_local_db local_db_name
+  dump_file = Dir[".dbwork/*#{app_name}*"][0]
+  restore_dump_file  dump_file, local_db_name
+end
+
+Then(/^local db '(.*)' has a table '(.*)' with a record with value '(.*)'$/) do |local_db, expected_table, expected_value|
+  with_local_db(local_db) do |conn|
+    conn.exec("SELECT * FROM #{expected_table}") do |result|
+      expect(result.first['name']).to eq expected_value
+    end
+  end
+end

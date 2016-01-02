@@ -2,8 +2,34 @@ require 'json'
 require 'pg'
 
 module HerokubedWorld
+  def restore_dump_file(dump_file, local_db)
+    #pg_restore --verbose --clean --no-acl --no-owner -h localhost -U postgres -d $TARGET_DB dbwork/$DUMP_FILE
+    restore_command = "pg_restore --verbose --clean --no-acl --no-owner -d #{local_db} #{dump_file}"
+    puts "RESTORE COMMAND: #{restore_command}"
+
+    `#{restore_command}`
+  end
+
+  def delete_local_test_dbs
+    if @test_local_dbs
+      @test_local_dbs.each do |local_db|
+        `dropdb #{local_db}`
+      end
+    end
+  end
+
+  def create_local_db(local_db_name)
+    register_local_db local_db_name
+    `createdb #{local_db_name}`
+  end
+
+  def register_local_db(local_db_name)
+    @test_local_dbs ||= []
+    @test_local_dbs << local_db_name
+  end
+
   def add_postgres_addon app_name
-    data = {'plan' => 'heroku-postgresql:hobby-dev'}
+    data     = { 'plan' => 'heroku-postgresql:hobby-dev' }
     response = call_heroku('POST', "apps/#{app_name}/addons", data)
     expect(response).to include 'heroku-postgresql:hobby-dev'
   end
@@ -26,7 +52,7 @@ module HerokubedWorld
   def create_test_app test_app_name
     register_test_app test_app_name
 
-    expect(call_heroku('POST', 'apps', {'name' => test_app_name})).to include test_app_name
+    expect(call_heroku('POST', 'apps', { 'name' => test_app_name })).to include test_app_name
   end
 
   def delete_test_apps
@@ -54,7 +80,13 @@ module HerokubedWorld
 
   def with_db(app_name)
     database_url = JSON.parse(call_heroku('GET', "apps/#{env_app_name(app_name)}/config-vars"))['DATABASE_URL']
-    conn = PG.connect(database_url)
+    conn         = PG.connect(database_url)
+    yield conn
+    conn.close
+  end
+
+  def with_local_db(local_db)
+    conn         = PG.connect(dbname: local_db)
     yield conn
     conn.close
   end
