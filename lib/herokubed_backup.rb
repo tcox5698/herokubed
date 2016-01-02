@@ -1,7 +1,6 @@
 require 'herokubed'
 
 module Herokubed
-
   class Backup
     class << self
       def backup_db(*args)
@@ -13,11 +12,8 @@ module Herokubed
         app = args[0]
         Dir.mkdir '.dbwork' unless Dir.exists? '.dbwork'
 
-        db_backup_command = "heroku pg:backups capture --app #{app}"
-        Herokubed.spawn_command(db_backup_command)
-
-        backup_download_command = "curl -o .dbwork/#{app}.dump `heroku pg:backups public-url --app #{app}`"
-        Herokubed.spawn_command(backup_download_command)
+        Herokubed.spawn_command("heroku pg:backups capture --app #{app}")
+        Herokubed.spawn_command("curl -o .dbwork/#{app}.dump `heroku pg:backups public-url --app #{app}`")
       end
 
       MESSAGE_USAGE = %q(

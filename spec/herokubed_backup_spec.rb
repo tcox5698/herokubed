@@ -53,7 +53,7 @@ Usage: kbackupdb source_app_name
         expect(Herokubed).to have_received(:spawn_command).with 'curl -o .dbwork/bob_the_app.dump `heroku pg:backups public-url --app bob_the_app`'
       end
 
-      context 'the .dbwork directory does not exist' do
+      context 'when the .dbwork directory does not exist' do
         let(:dbwork_exists) { false }
 
         it 'creates the .dbwork directory' do
@@ -61,7 +61,7 @@ Usage: kbackupdb source_app_name
         end
       end
 
-      context 'the .dbwork directory already exists' do
+      context 'when the .dbwork directory already exists' do
         it 'does not create a .dbwork directory' do
           expect(Dir).not_to have_received(:mkdir).with('.dbwork')
         end

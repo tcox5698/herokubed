@@ -2,7 +2,6 @@ Feature: I can backup an heroku postgres database to a local directory
 
   Background:
     Given heroku toolbelt is installed
-    Given herokubed is built and installed
     Given I have logged into heroku
 
   Scenario:

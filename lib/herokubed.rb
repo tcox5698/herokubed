@@ -28,7 +28,5 @@ module Herokubed
       end
       JSON.parse(res.body)['DATABASE_URL']
     end
-
-
   end
 end

@@ -3,7 +3,6 @@ require 'pg'
 
 module HerokubedWorld
   def restore_dump_file(dump_file, local_db)
-    #pg_restore --verbose --clean --no-acl --no-owner -h localhost -U postgres -d $TARGET_DB dbwork/$DUMP_FILE
     restore_command = "pg_restore --verbose --clean --no-acl --no-owner -d #{local_db} #{dump_file}"
     puts "RESTORE COMMAND: #{restore_command}"
 
@@ -78,7 +77,7 @@ module HerokubedWorld
     @mapped_app_names[app_name]
   end
 
-  def with_db(app_name)
+  def with_heroku_db(app_name)
     database_url = JSON.parse(call_heroku('GET', "apps/#{env_app_name(app_name)}/config-vars"))['DATABASE_URL']
     conn         = PG.connect(database_url)
     yield conn

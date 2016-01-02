@@ -1,7 +1,6 @@
 require 'herokubed'
 
 module Herokubed
-
   class Transfer
     class << self
       def transfer_db(*args)
