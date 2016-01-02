@@ -2,41 +2,13 @@ require 'net/https'
 require 'uri'
 require 'json'
 
-class Herokubed
+module Herokubed
   class << self
-
-    def backup_db(*args)
-      Dir.mkdir '.dbwork' unless Dir.exist? '.dbwork'
-
-      app = args[0]
-
-      db_backup_command = "heroku pg:backups capture --app #{app}"
-
-      puts "DB BACKUP COMMAND: #{db_backup_command}"
-      pid = spawn(db_backup_command)
+    def spawn_command(command_string)
+      puts "executing: #{command_string}"
+      pid = spawn(command_string)
       Process.wait pid
-
-
-      backup_download_command = "curl -o .dbwork/#{app}.dump `heroku pg:backups public-url --app #{app}`"
-
-      puts "BACKUP DOWNLOAD COMMAND: #{backup_download_command}"
-      pid = spawn(backup_download_command)
-      Process.wait pid
-    end
-
-    def transfer_db(*args)
-      if args.length != 2
-        puts MESSAGE_USAGE
-        exit false
-      end
-
-      app_1 = args[0]
-      app_2 = args[1]
-
-      db_copy_command = "heroku pg:copy #{database_url(app_1)} DATABASE_URL --app #{app_2} --confirm #{app_2}"
-      puts "DB COPY COMMAND: #{db_copy_command}"
-      pid = spawn(db_copy_command)
-      Process.wait pid
+      puts "completed: #{command_string}"
     end
 
     def database_url(app_name)
@@ -57,12 +29,6 @@ class Herokubed
       JSON.parse(res.body)['DATABASE_URL']
     end
 
-    MESSAGE_USAGE = %q{
-Transfers a postgres database from one heroku
-application to another, overwriting the postgres
-database of the second application.
 
-Usage: ktransferdb source_app_name target_app_name
-}
   end
 end

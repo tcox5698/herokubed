@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 
-require 'herokubed'
-Herokubed.transfer_db(*ARGV)
+require 'herokubed_transfer'
+Herokubed::Transfer.transfer_db(*ARGV)
