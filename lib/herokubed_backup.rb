@@ -1,4 +1,5 @@
 require 'herokubed'
+require 'fileutils'
 
 module Herokubed
   class Backup
@@ -11,6 +12,12 @@ module Herokubed
 
         app = args[0]
         Dir.mkdir '.dbwork' unless Dir.exists? '.dbwork'
+
+        previous_dump_file = File.join('.dbwork', "#{app}.dump")
+        if File.exists?(previous_dump_file)
+          last_modified = File.mtime(previous_dump_file)
+          FileUtils.mv(previous_dump_file, "#{previous_dump_file}.#{last_modified.strftime('%Y%m%d_%H%M%S')}")
+        end
 
         Herokubed.spawn_command("heroku pg:backups capture --app #{app}")
         Herokubed.spawn_command("curl -o .dbwork/#{app}.dump `heroku pg:backups public-url --app #{app}`")

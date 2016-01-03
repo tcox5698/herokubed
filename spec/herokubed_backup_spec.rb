@@ -1,4 +1,5 @@
 require 'herokubed_backup'
+require 'fileutils'
 
 describe Herokubed::Backup do
   describe '.backup_db' do
@@ -34,16 +35,28 @@ Usage: kbackupdb source_app_name
 
     context 'with valid input' do
       let(:dbwork_exists) { true }
-      let(:app_name) { nil }
+      let(:app_name) { 'bob_the_app' }
+      let(:previous_dump_exists) { false }
+      let(:previous_dump_mtime) { Time.now - 300 }
 
       before do
+        allow(File).to receive(:exists?).with('.dbwork/bob_the_app.dump').and_return previous_dump_exists
+        allow(File).to receive(:mtime).with('.dbwork/bob_the_app.dump').and_return previous_dump_mtime
+        allow(FileUtils).to receive(:mv)
         allow(Herokubed).to receive(:spawn_command)
         allow(Dir).to receive(:mkdir)
         allow(Dir).to receive(:exists?).with('.dbwork').and_return dbwork_exists
         Herokubed::Backup.backup_db app_name
       end
 
-      let(:app_name) { 'bob_the_app' }
+      context 'when previous dump file has been downloaded' do
+        let(:previous_dump_exists) { true }
+
+        it 'renames the file with an extension representing the last modified time' do
+          expected_file_name = ".dbwork/bob_the_app.dump.#{previous_dump_mtime.strftime('%Y%m%d_%H%M%S')}"
+          expect(FileUtils).to have_received(:mv).with('.dbwork/bob_the_app.dump', expected_file_name)
+        end
+      end
 
       it 'spawns a command to create the backup' do
         expect(Herokubed).to have_received(:spawn_command).with 'heroku pg:backups capture --app bob_the_app'

@@ -71,3 +71,17 @@ Then(/^local db '(.*)' has a table '(.*)' with a record with value '(.*)'$/) do 
     end
   end
 end
+
+
+Given(/^I have a dump file for app '(.*)' in the \.dbwork directory last modified at '(.*)'$/) do |app_name, modified_time_string|
+  Dir.mkdir('.dbwork')
+  dump_file_name = "#{env_app_name(app_name)}.dump"
+  `touch -m -t #{modified_time_string} .dbwork/#{dump_file_name}`
+end
+
+
+And(/^there is a dump file for app '(.*)' in the \.dbwork directory postfixed with '(.*)'$/) do |app_name, expected_date_postfix|
+  expected_file_name = ".dbwork/#{env_app_name(app_name)}.dump.#{expected_date_postfix}"
+  actual_file_name   = Dir[expected_file_name][0]
+  expect(actual_file_name).to match /#{expected_file_name}/
+end
