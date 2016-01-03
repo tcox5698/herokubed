@@ -9,6 +9,8 @@ else
   sudo -i -u vagrant -H sh -c "\curl -sSL https://get.rvm.io | bash -s stable --ruby"
 
   sudo -i -u vagrant -H sh -c "gem install bundler"
+
+
 fi
 
 if [ -e "/usr/share/postgresql-common/pg_wrapper" ];then
@@ -18,4 +20,6 @@ else
   sudo apt-get update --qq
   sudo apt-get install -y postgresql-9.4
   sudo apt-get install -y postgresql-server-dev-9.4
+
+  sudo -i -u postgres -H sh -c "createuser -s vagrant"
 fi
