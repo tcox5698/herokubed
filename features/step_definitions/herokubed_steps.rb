@@ -26,22 +26,12 @@ Then(/^app '(.*)' has a table '(.*)' with a record with value '(.*)'$/) do |app_
 end
 
 When(/^I successfully execute kbackupdb for app '(.*)'$/) do |app_name|
-  puts "STEP: executing: kbackupdb"
-  command_array = ['kbackupdb']
-  command_array << env_app_name(app_name)
-  pid = spawn(command_array.join(' '))
-  Process.wait pid
-  puts "STEP: completed: #{command_array.inspect}"
+  command_string = "kbackupdb #{env_app_name(app_name)}"
+  spawn_command(command_string)
 end
 
 When(/^I successfully execute ktransferdb from app '(.*)' to app '(.*)'$/) do |app_name_1, app_name_2|
-  puts "STEP: executing: ktransferdb"
-  command_array = ['ktransferdb']
-  command_array << env_app_name(app_name_1)
-  command_array << env_app_name(app_name_2)
-  pid = spawn(command_array.join(' '))
-  Process.wait pid
-  puts "STEP: completed: #{command_array.inspect}"
+  spawn_command("ktransferdb #{env_app_name(app_name_1)} #{env_app_name(app_name_2)}")
 end
 
 Then(/^I get addon info for app '(.*)' addon '(.*)'$/) do |app_name, addon_name|
@@ -72,13 +62,11 @@ Then(/^local db '(.*)' has a table '(.*)' with a record with value '(.*)'$/) do 
   end
 end
 
-
 Given(/^I have a dump file for app '(.*)' in the \.dbwork directory last modified at '(.*)'$/) do |app_name, modified_time_string|
   Dir.mkdir('.dbwork')
   dump_file_name = "#{env_app_name(app_name)}.dump"
   `touch -m -t #{modified_time_string} .dbwork/#{dump_file_name}`
 end
-
 
 And(/^there is a dump file for app '(.*)' in the \.dbwork directory postfixed with '(.*)'$/) do |app_name, expected_date_postfix|
   expected_file_name = ".dbwork/#{env_app_name(app_name)}.dump.#{expected_date_postfix}"

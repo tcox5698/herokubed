@@ -2,6 +2,13 @@ require 'json'
 require 'pg'
 
 module HerokubedWorld
+  def spawn_command(command_string)
+    puts "STEP: executing: #{command_string}"
+    pid = spawn(command_string)
+    Process.wait pid
+    puts "STEP: completed: #{command_string}"
+  end
+
   def restore_dump_file(dump_file, local_db)
     restore_command = "pg_restore --verbose --clean --no-acl --no-owner -d #{local_db} #{dump_file}"
     puts "RESTORE COMMAND: #{restore_command}"
