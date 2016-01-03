@@ -43,6 +43,7 @@ Download a backup of a postgres db from an heroku app to the .dbwork directory
 1. merge release to master
 1. merge master to release
 1. on release, bump the version in the gemspec file
+1. `bundle install`
 1. commit 
 1. tag with the version from the gemspec file
 1. push release and tags to github
