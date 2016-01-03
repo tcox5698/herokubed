@@ -50,7 +50,7 @@ end
 
 When(/^I load the \.dbwork dump file for app '(.*)' into local db '(.*)'$/) do |app_name, local_db_name|
   create_local_db local_db_name
-  dump_file = Dir[".dbwork/*#{app_name}*"][0]
+  dump_file = Dir[".dbwork/*#{env_app_name(app_name)}.dump"][0]
   restore_dump_file dump_file, local_db_name
 end
 
