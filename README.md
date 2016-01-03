@@ -47,3 +47,4 @@ Download a backup of a postgres db from an heroku app to the .dbwork directory
 1. commit 
 1. tag with the version from the gemspec file
 1. push release and tags to github
+1. merge release to master
