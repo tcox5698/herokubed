@@ -1,6 +1,8 @@
-puts 'CUCUMBER - building and installing herokubed gem'
+puts 'CUCUMBER - uninstalling herokubed gem'
 `gem uninstall herokubed -a -x`
+puts 'CUCUMBER - building herokubed gem'
 gem_file_name = `gem build herokubed.gemspec | grep -Eo 'File:(.*)$' | cut -c6-`
+puts 'CUCUMBER - installing herokubed gem'
 `gem install --no-ri --no-rdoc #{gem_file_name}`
 puts 'CUCUMBER - building and installing herokubed gem - FINISHED'
 
