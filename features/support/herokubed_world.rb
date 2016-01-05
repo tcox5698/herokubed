@@ -4,19 +4,7 @@ require 'pg'
 module HerokubedWorld
   def spawn_command(command_string)
     puts "STEP: executing: #{command_string} in directory #{`pwd`}"
-    env ={}
-    # env     = {
-    #     'PATH' => '/home/vagrant/.rvm/gems/ruby-2.2.1/bin:/home/vagrant/.rvm/rubies/ruby-2.2.1/bin:/usr/bin',
-    #     'HOME' => ENV['HOME'],
-    #     'HEROKU_TOKEN' => ENV['HEROKU_TOKEN'],
-    #     'HEROKU_USERNAME' => ENV['HEROKU_USERNAME']
-    # }
-    options = {}
-    # options = { unsetenv_others: true }
-
-    spawn(env, "echo $PATH", options)
-    pid = spawn(env, command_string, options)
-
+    pid = spawn(command_string)
     Process.wait pid
     puts "STEP: completed: #{command_string}"
   end
