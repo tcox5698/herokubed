@@ -4,7 +4,6 @@ require 'pg'
 module HerokubedWorld
   def spawn_command(command_string)
     puts "STEP: executing: #{command_string} in directory #{`pwd`}"
-    #/home/vagrant/.rvm/gems/ruby-2.2.1/bin:/home/vagrant/.rvm/gems/ruby-2.2.1@global/bin:/home/vagrant/.rvm/rubies/ruby-2.2.1/bin:/usr/local/heroku/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/vagrant/.rvm/bin
     env     = {
         'PATH' => '/home/vagrant/.rvm/gems/ruby-2.2.1/bin:/home/vagrant/.rvm/rubies/ruby-2.2.1/bin:/usr/bin',
         'HOME' => ENV['HOME'],

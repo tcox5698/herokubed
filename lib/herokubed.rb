@@ -29,9 +29,7 @@ module Herokubed
       res                  = http.start do |http|
         http.request(req)
       end
-      #puts "RESPONSE: #{res.inspect}"
       parsed_response = JSON.parse(res.body)['DATABASE_URL']
-      #puts "PARSED RESPONSE: #{parsed_response}"
       parsed_response
     end
   end
