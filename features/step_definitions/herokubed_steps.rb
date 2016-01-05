@@ -26,7 +26,6 @@ Then(/^app '(.*)' has a table '(.*)' with a record with value '(.*)'$/) do |app_
 end
 
 When(/^I successfully execute kbackupdb for app '(.*)'$/) do |app_name|
-  puts "ENV: #{ENV.inspect}"
   command_string = "kbackupdb #{env_app_name(app_name)}"
   spawn_command(command_string)
 end
@@ -46,7 +45,6 @@ Given(/^heroku toolbelt is installed$/) do
 end
 
 Then(/^I have a new dump file in the \.dbwork directory for app '(.*)'$/) do |app_name|
-  puts
   expect(File.mtime(".dbwork/#{env_app_name(app_name)}.dump")).to be > (Time.now - 300)
 end
 
