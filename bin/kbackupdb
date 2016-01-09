@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 
-require 'herokubed/herokubed_backup'
+require 'herokubed/backup'
 Herokubed::Backup.backup_db(*ARGV)

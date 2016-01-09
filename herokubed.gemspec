@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.email       = 'tcox56_98@yahoo.com'
   s.files       = [
       'lib/herokubed/herokubed.rb',
-      'lib/herokubed/herokubed_backup.rb',
-      'lib/herokubed/herokubed_transfer.rb'
+      'lib/herokubed/backup.rb',
+      'lib/herokubed/transfer.rb'
 
   ]
   s.homepage    = 'https://github.com/tcox5698/herokubed'

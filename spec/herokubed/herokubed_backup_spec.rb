@@ -1,4 +1,4 @@
-require 'herokubed/herokubed_backup'
+require 'herokubed/backup'
 require 'fileutils'
 
 module Herokubed

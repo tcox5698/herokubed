@@ -30,10 +30,6 @@ When(/^I successfully execute ktransferdb from app '(.*)' to app '(.*)'$/) do |a
   spawn_command("ktransferdb #{env_app_name(app_name_1)} #{env_app_name(app_name_2)}")
 end
 
-Then(/^I get addon info for app '(.*)' addon '(.*)'$/) do |app_name, addon_name|
-  call_heroku('GET', "apps/#{env_app_name(app_name)}/config-vars")
-end
-
 Given(/^heroku toolbelt is installed$/) do
   unless `which heroku`.include? 'heroku'
     `wget -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh`
@@ -68,14 +64,6 @@ And(/^there is a dump file for app '(.*)' in the \.dbwork directory postfixed wi
   expected_file_name = ".dbwork/#{env_app_name(app_name)}.dump.#{expected_date_postfix}"
   actual_file_name   = Dir[expected_file_name][0]
   expect(actual_file_name).to match /#{expected_file_name}/
-end
-
-
-Given(/^I have a postgres dump file from app '(.*)' with a table '(.*)' with a record with value '(.*)'$/) do |app_name, expected_table, expected_value|
-  create_test_app env_app_name(app_name)
-  add_postgres_addon(env_app_name(app_name))
-  create_test_table(app_name, expected_table, expected_value)
-  execute_kbackupdb app_name
 end
 
 When(/^I successfully execute kloaddumplocally from app '(.*)' to local database '(.*)'$/) do |app_name, local_database|

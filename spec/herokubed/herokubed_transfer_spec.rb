@@ -1,4 +1,4 @@
-require 'herokubed/herokubed_transfer'
+require 'herokubed/transfer'
 
 module Herokubed
   describe Transfer do

@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 
-require 'herokubed/herokubed_load_dump_locally'
+require 'herokubed/load_dump_locally'
 Herokubed::LoadDumpLocally.load(*ARGV)
