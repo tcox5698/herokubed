@@ -61,6 +61,18 @@ module HerokubedWorld
     expect(call_heroku('POST', 'apps', { 'name' => test_app_name })).to include test_app_name
   end
 
+  def create_test_table(app_name, table_name, test_value)
+    with_heroku_db(app_name) do |conn|
+      conn.exec("CREATE TABLE #{table_name} (name varchar(100));")
+      conn.exec("INSERT INTO #{table_name} (name) values ('#{test_value}');")
+    end
+  end
+
+  def execute_kbackupdb(app_name)
+    command_string = "kbackupdb #{env_app_name(app_name)}"
+    spawn_command(command_string)
+  end
+
   def delete_test_apps
     if @test_app_names
       @test_app_names.each do |test_app_name|

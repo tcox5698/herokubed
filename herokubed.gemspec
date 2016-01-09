@@ -7,13 +7,15 @@ Gem::Specification.new do |s|
   s.authors     = ['Tom Cox']
   s.email       = 'tcox56_98@yahoo.com'
   s.files       = [
-      'lib/herokubed.rb',
-      'lib/herokubed_backup.rb',
-      'lib/herokubed_transfer.rb'
+      'lib/herokubed/herokubed.rb',
+      'lib/herokubed/backup.rb',
+      'lib/herokubed/transfer.rb',
+      'lib/herokubed/load_dump_locally.rb'
+
   ]
   s.homepage    = 'https://github.com/tcox5698/herokubed'
   s.license     = 'Apache-2.0'
-  s.executables = ['ktransferdb', 'kbackupdb']
+  s.executables = ['ktransferdb', 'kbackupdb','kloaddumplocally']
   s.add_development_dependency 'rspec', '~> 3.4'
   s.add_development_dependency 'rspec-expectations', '~> 3.4'
   s.add_development_dependency 'cucumber', '~> 2.1'

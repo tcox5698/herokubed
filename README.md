@@ -25,6 +25,10 @@ Download a backup of a postgres db from an heroku app to the .dbwork directory
  
     kbackupdb source_app
     
+Load an app's dump file to your local postgres instance
+
+    kloaddumplocally source_app local_db
+    
 # Development
     
 ## To run specs and features:    

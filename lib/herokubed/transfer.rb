@@ -1,11 +1,11 @@
-require 'herokubed'
+require 'herokubed/herokubed'
 
 module Herokubed
   class Transfer
     class << self
       def transfer_db(*args)
         if args.length != 2
-          puts MESSAGE_USAGE
+          puts USAGE_MESSAGE
           exit false
         end
 
@@ -15,7 +15,7 @@ module Herokubed
         Herokubed.spawn_command(db_copy_command)
       end
 
-      MESSAGE_USAGE = %q{
+      USAGE_MESSAGE = %q{
 Transfers a postgres database from one heroku
 application to another, overwriting the postgres
 database of the second application.
