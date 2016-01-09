@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'herokubed'
-  s.version     = '0.0.5'
+  s.version     = '0.0.6.pre'
   s.date        = Time.now.strftime('%Y-%m-%d')
   s.summary     = 'Command line heroku convenience.'
   s.description = 'Herokubed provides simple command line heroku operations to do things like backup or transfer your postgres database.'
