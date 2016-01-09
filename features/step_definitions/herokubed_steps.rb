@@ -44,8 +44,8 @@ Given(/^heroku toolbelt is installed$/) do
   end
 end
 
-Then(/^I have a dump file in the \.dbwork directory for app '(.*)'$/) do |app_name|
-  expect(Dir[".dbwork/*#{app_name}*"][0]).to match /#{app_name}.*.dump/
+Then(/^I have a new dump file in the \.dbwork directory for app '(.*)'$/) do |app_name|
+  expect(File.mtime(".dbwork/#{env_app_name(app_name)}.dump")).to be > (Time.now - 300)
 end
 
 When(/^I load the \.dbwork dump file for app '(.*)' into local db '(.*)'$/) do |app_name, local_db_name|
@@ -63,7 +63,7 @@ Then(/^local db '(.*)' has a table '(.*)' with a record with value '(.*)'$/) do 
 end
 
 Given(/^I have a dump file for app '(.*)' in the \.dbwork directory last modified at '(.*)'$/) do |app_name, modified_time_string|
-  Dir.mkdir('.dbwork')
+  Dir.mkdir('.dbwork') unless File.exists?('.dbwork')
   dump_file_name = "#{env_app_name(app_name)}.dump"
   `touch -m -t #{modified_time_string} .dbwork/#{dump_file_name}`
 end
@@ -73,3 +73,4 @@ And(/^there is a dump file for app '(.*)' in the \.dbwork directory postfixed wi
   actual_file_name   = Dir[expected_file_name][0]
   expect(actual_file_name).to match /#{expected_file_name}/
 end
+

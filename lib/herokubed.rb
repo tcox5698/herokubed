@@ -12,12 +12,15 @@ module Herokubed
     end
 
     def database_url(app_name)
+      raise "environment variable HEROKU_TOKEN is required" unless ENV['HEROKU_TOKEN']
+
       config_url       = "https://api.heroku.com/apps/#{app_name}/config-vars"
       uri              = URI.parse(config_url)
       http             = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl     =true
+      http.use_ssl     = true
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
+      puts "http:  #{http.inspect}"
 
       req                  = Net::HTTP::Get.new(uri.path)
       req["Accept"]        = "application/vnd.heroku+json; version=3"
@@ -26,7 +29,8 @@ module Herokubed
       res                  = http.start do |http|
         http.request(req)
       end
-      JSON.parse(res.body)['DATABASE_URL']
+      parsed_response = JSON.parse(res.body)['DATABASE_URL']
+      parsed_response
     end
   end
 end

@@ -3,7 +3,7 @@ require 'pg'
 
 module HerokubedWorld
   def spawn_command(command_string)
-    puts "STEP: executing: #{command_string}"
+    puts "STEP: executing: #{command_string} in directory #{`pwd`}"
     pid = spawn(command_string)
     Process.wait pid
     puts "STEP: completed: #{command_string}"
@@ -13,20 +13,20 @@ module HerokubedWorld
     restore_command = "pg_restore --verbose --clean --no-acl --no-owner -d #{local_db} #{dump_file}"
     puts "RESTORE COMMAND: #{restore_command}"
 
-    `#{restore_command}`
+    spawn_command(restore_command)
   end
 
   def delete_local_test_dbs
     if @test_local_dbs
       @test_local_dbs.each do |local_db|
-        `dropdb #{local_db}`
+        spawn_command("dropdb #{local_db}")
       end
     end
   end
 
   def create_local_db(local_db_name)
     register_local_db local_db_name
-    `createdb #{local_db_name}`
+    spawn_command("createdb #{local_db_name}")
   end
 
   def register_local_db(local_db_name)
@@ -92,7 +92,7 @@ module HerokubedWorld
   end
 
   def with_local_db(local_db)
-    conn         = PG.connect(dbname: local_db)
+    conn = PG.connect(dbname: local_db)
     yield conn
     conn.close
   end
