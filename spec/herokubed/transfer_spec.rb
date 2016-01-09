@@ -19,7 +19,7 @@ Usage: ktransferdb source_app_name target_app_name
       end
     end
 
-    describe '.ktransferdb' do
+    describe '.transfer_db' do
       before do
         allow(Herokubed::Transfer).to receive(:exit)
         allow(Herokubed::Transfer).to receive(:puts)
@@ -59,12 +59,5 @@ Usage: ktransferdb source_app_name target_app_name
       end
     end
 
-    describe '.database_url' do
-      let(:input_app_name) { 'bob_app' }
-      subject { Herokubed.database_url(input_app_name) }
-      before do
-        allow(Net::HTTP).to receive(:GET)
-      end
-    end
   end
 end
