@@ -1,4 +1,4 @@
-require 'herokubed'
+require 'herokubed/herokubed'
 require 'fileutils'
 
 module Herokubed

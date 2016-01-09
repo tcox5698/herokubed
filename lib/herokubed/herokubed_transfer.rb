@@ -1,4 +1,4 @@
-require 'herokubed'
+require 'herokubed/herokubed'
 
 module Herokubed
   class Transfer

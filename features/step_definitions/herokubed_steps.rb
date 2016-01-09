@@ -5,16 +5,11 @@ end
 
 And(/^I have app '(.*)' with a postgres database$/) do |app_name|
   create_test_app env_app_name(app_name)
-  expect(call_heroku('GET', 'apps')).to include "https://#{env_app_name(app_name)}.herokuapp.com"
-
   add_postgres_addon(env_app_name(app_name))
 end
 
 And(/^I add table '(.*)' to app '(.*)' with a record with value '(.*)'$/) do |table_name, app_name, insert_value|
-  with_heroku_db(app_name) do |conn|
-    conn.exec("CREATE TABLE #{table_name} (name varchar(100));")
-    conn.exec("INSERT INTO #{table_name} (name) values ('#{insert_value}');")
-  end
+  create_test_table(app_name, table_name, insert_value)
 end
 
 Then(/^app '(.*)' has a table '(.*)' with a record with value '(.*)'$/) do |app_name, expected_table, expected_value|
@@ -25,9 +20,10 @@ Then(/^app '(.*)' has a table '(.*)' with a record with value '(.*)'$/) do |app_
   end
 end
 
+
+
 When(/^I successfully execute kbackupdb for app '(.*)'$/) do |app_name|
-  command_string = "kbackupdb #{env_app_name(app_name)}"
-  spawn_command(command_string)
+  execute_kbackupdb(app_name)
 end
 
 When(/^I successfully execute ktransferdb from app '(.*)' to app '(.*)'$/) do |app_name_1, app_name_2|
@@ -74,3 +70,14 @@ And(/^there is a dump file for app '(.*)' in the \.dbwork directory postfixed wi
   expect(actual_file_name).to match /#{expected_file_name}/
 end
 
+
+Given(/^I have a postgres dump file from app '(.*)' with a table '(.*)' with a record with value '(.*)'$/) do |app_name, expected_table, expected_value|
+  create_test_app env_app_name(app_name)
+  add_postgres_addon(env_app_name(app_name))
+  create_test_table(app_name, expected_table, expected_value)
+  execute_kbackupdb app_name
+end
+
+When(/^I successfully execute kloaddumplocally from app '(.*)' to local database '(.*)'$/) do |app_name, local_database|
+  spawn_command "kloaddumplocally #{env_app_name(app_name)} #{local_database}"
+end

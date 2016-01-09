@@ -9,6 +9,7 @@ module Herokubed
       pid = spawn(command_string)
       Process.wait pid
       puts "completed: #{command_string}"
+      $?.exitstatus
     end
 
     def database_url(app_name)
@@ -19,8 +20,6 @@ module Herokubed
       http             = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl     = true
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-      puts "http:  #{http.inspect}"
 
       req                  = Net::HTTP::Get.new(uri.path)
       req["Accept"]        = "application/vnd.heroku+json; version=3"
