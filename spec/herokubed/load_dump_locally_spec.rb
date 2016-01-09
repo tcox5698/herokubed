@@ -3,25 +3,52 @@ require 'herokubed/load_dump_locally'
 module Herokubed
   describe LoadDumpLocally do
     describe '.load_db' do
-
-
-      context 'invalid parameters' do
-        let(:params) {''}
+      context 'dump file does not exist' do
+        let(:params) {'fake-app fake-db'}
 
         before do
           allow(Herokubed).to receive(:spawn_command)
           allow(LoadDumpLocally).to receive(:puts)
-          allow(LoadDumpLocally).to receive(:exit)
-          LoadDumpLocally.load_db(*params.split)
+          allow(File).to receive(:exists?).and_return false
+          begin
+            LoadDumpLocally.load_db(*params.split)
+            raise 'expected exit did not occur'
+          rescue SystemExit => e
+            @exited = e
+          end
+        end
+
+        it 'exits as failed' do
+          expect(@exited.status).to be > 0
+        end
+
+        it 'puts a message' do
+          expect(LoadDumpLocally).to have_received(:puts).with LoadDumpLocally::DUMP_FILE_MISSING_MESSAGE
+        end
+      end
+
+      context 'invalid parameters' do
+        let(:params) { '' }
+
+        before do
+          allow(File).to receive(:exists?).and_return true
+          allow(Herokubed).to receive(:spawn_command)
+          allow(LoadDumpLocally).to receive(:puts)
+          begin
+            LoadDumpLocally.load_db(*params.split)
+            raise 'expected exit did not occur'
+          rescue SystemExit => e
+            @exited = e
+          end
         end
 
         context 'when no parameters' do
-          it 'puts a usage message' do
-            expect(LoadDumpLocally).to have_received(:puts).with LOAD_USAGE_MESSAGE
+          it 'exits as failed' do
+            expect(@exited.status).to be > 0
           end
 
-          it 'exits as failed' do
-            expect(LoadDumpLocally).to have_received(:exit).with(false)
+          it 'puts a message' do
+            expect(LoadDumpLocally).to have_received(:puts).with LoadDumpLocally::USAGE_MESSAGE
           end
         end
       end
@@ -29,8 +56,13 @@ module Herokubed
       context 'happy path with valid parameters' do
         let(:params) { 'fake-app-name fake-db-name' }
         before do
+          allow(File).to receive(:exists?).and_return true
           allow(Herokubed).to receive(:spawn_command)
           LoadDumpLocally.load_db(*params.split)
+        end
+
+        it 'checks for the existence of the dump file' do
+          expect(File).to have_received(:exists?).with '.dbwork/fake-app-name.dump'
         end
 
         it 'drops the target db' do
@@ -48,13 +80,4 @@ module Herokubed
       end
     end
   end
-
-  LOAD_USAGE_MESSAGE = %q(
-Loads a postgres dump file from an heroku application
-to a local postgres database. Assumes that kbackupdb
-has been used successfully to create a .dbwork/<app_name>.dump file.
-WARNING: overwrites the local database.
-
-Usage: kloaddumplocally source_app_name target_local_database
-)
 end
