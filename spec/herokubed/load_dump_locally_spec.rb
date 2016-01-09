@@ -2,7 +2,9 @@ require 'herokubed/load_dump_locally'
 
 module Herokubed
   describe LoadDumpLocally do
-    describe '.load' do
+    describe '.load_db' do
+
+
       context 'invalid parameters' do
         let(:params) {''}
 
@@ -10,7 +12,7 @@ module Herokubed
           allow(Herokubed).to receive(:spawn_command)
           allow(LoadDumpLocally).to receive(:puts)
           allow(LoadDumpLocally).to receive(:exit)
-          LoadDumpLocally.load(*params.split)
+          LoadDumpLocally.load_db(*params.split)
         end
 
         context 'when no parameters' do
@@ -28,7 +30,7 @@ module Herokubed
         let(:params) { 'fake-app-name fake-db-name' }
         before do
           allow(Herokubed).to receive(:spawn_command)
-          LoadDumpLocally.load(*params.split)
+          LoadDumpLocally.load_db(*params.split)
         end
 
         it 'drops the target db' do

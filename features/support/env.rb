@@ -1,5 +1,5 @@
 puts 'CUCUMBER - uninstalling herokubed gem'
-`gem uninstall herokubed -a -x`
+`gem uninstall -i /home/vagrant/.rvm/gems/ruby-2.2.1@global herokubed -a -x`
 puts 'CUCUMBER - building herokubed gem'
 gem_file_name = `gem build herokubed.gemspec | grep -Eo 'File:(.*)$' | cut -c6-`
 puts 'CUCUMBER - installing herokubed gem'

@@ -1,10 +1,9 @@
 require 'herokubed/herokubed'
-require 'fileutils'
 
 module Herokubed
   class LoadDumpLocally
     class << self
-      def load(*args)
+      def load_db(*args)
         if args.length != 2
           puts USAGE_MESSAGE
           exit false

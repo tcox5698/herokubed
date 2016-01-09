@@ -9,7 +9,8 @@ Gem::Specification.new do |s|
   s.files       = [
       'lib/herokubed/herokubed.rb',
       'lib/herokubed/backup.rb',
-      'lib/herokubed/transfer.rb'
+      'lib/herokubed/transfer.rb',
+      'lib/herokubed/load_dump_locally.rb'
 
   ]
   s.homepage    = 'https://github.com/tcox5698/herokubed'
