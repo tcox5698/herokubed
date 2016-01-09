@@ -5,6 +5,11 @@ module Herokubed
   class LoadDumpLocally
     class << self
       def load(*args)
+        if args.length != 2
+          puts USAGE_MESSAGE
+          exit false
+        end
+
         app_name, local_database = args[0], args[1]
         dump_file = ".dbwork/#{app_name}.dump"
 
@@ -16,4 +21,13 @@ module Herokubed
       end
     end
   end
+
+  USAGE_MESSAGE = %q(
+Loads a postgres dump file from an heroku application
+to a local postgres database. Assumes that kbackupdb
+has been used successfully to create a .dbwork/<app_name>.dump file.
+WARNING: overwrites the local database.
+
+Usage: kloaddumplocally source_app_name target_local_database
+)
 end

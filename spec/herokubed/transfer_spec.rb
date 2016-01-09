@@ -2,16 +2,9 @@ require 'herokubed/transfer'
 
 module Herokubed
   describe Transfer do
-
     shared_examples_for 'an incorrect ktransferdb usage' do
       it 'puts a usage message' do
-        expect(Herokubed::Transfer).to have_received(:puts).with %q(
-Transfers a postgres database from one heroku
-application to another, overwriting the postgres
-database of the second application.
-
-Usage: ktransferdb source_app_name target_app_name
-)
+        expect(Herokubed::Transfer).to have_received(:puts).with EXPECTED_USAGE_MESSAGE
       end
 
       it 'exits as failed' do
@@ -60,4 +53,12 @@ Usage: ktransferdb source_app_name target_app_name
     end
 
   end
+
+  EXPECTED_USAGE_MESSAGE = %q(
+Transfers a postgres database from one heroku
+application to another, overwriting the postgres
+database of the second application.
+
+Usage: ktransferdb source_app_name target_app_name
+)
 end

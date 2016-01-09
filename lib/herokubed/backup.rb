@@ -6,7 +6,7 @@ module Herokubed
     class << self
       def backup_db(*args)
         if args.length != 1
-          puts MESSAGE_USAGE
+          puts USAGE_MESSAGE
           exit false
         end
 
@@ -23,7 +23,7 @@ module Herokubed
         Herokubed.spawn_command("curl -o .dbwork/#{app}.dump `heroku pg:backups public-url --app #{app}`")
       end
 
-      MESSAGE_USAGE = %q(
+      USAGE_MESSAGE = %q(
 Creates a dump file of a postgres database from an heroku
 application, and downloads that file to .dbwork/<app_name>.dump.
 If there is an existing .dbwork/<app_name>.dump file, that file will
