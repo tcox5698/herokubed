@@ -4,7 +4,7 @@ module Herokubed
   describe Transfer do
     shared_examples_for 'an incorrect ktransferdb usage' do
       it 'puts a usage message' do
-        expect(Herokubed::Transfer).to have_received(:puts).with EXPECTED_USAGE_MESSAGE
+        expect(Herokubed::Transfer).to have_received(:puts).with TRANSFER_USAGE_MESSAGE
       end
 
       it 'exits as failed' do
@@ -54,7 +54,7 @@ module Herokubed
 
   end
 
-  EXPECTED_USAGE_MESSAGE = %q(
+  TRANSFER_USAGE_MESSAGE = %q(
 Transfers a postgres database from one heroku
 application to another, overwriting the postgres
 database of the second application.

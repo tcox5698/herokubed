@@ -15,7 +15,7 @@ module Herokubed
 
         context 'when no parameters' do
           it 'puts a usage message' do
-            expect(LoadDumpLocally).to have_received(:puts).with EXPECTED_USAGE_MESSAGE
+            expect(LoadDumpLocally).to have_received(:puts).with LOAD_USAGE_MESSAGE
           end
 
           it 'exits as failed' do
@@ -47,7 +47,7 @@ module Herokubed
     end
   end
 
-  EXPECTED_USAGE_MESSAGE = %q(
+  LOAD_USAGE_MESSAGE = %q(
 Loads a postgres dump file from an heroku application
 to a local postgres database. Assumes that kbackupdb
 has been used successfully to create a .dbwork/<app_name>.dump file.
