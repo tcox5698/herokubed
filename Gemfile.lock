@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    herokubed (0.0.6.pre)
+    herokubed (0.0.6)
 
 GEM
   remote: https://rubygems.org/
